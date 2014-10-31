@@ -41,10 +41,22 @@ The depth of the objects in the incoming data to pluck out. This is what you wan
 
 Convert data into an object stream.
 
+#### opts.pluck
+- Type: `Array|String` (default: [])
+
+Only return select properties from JSON objects.
+
 #### opts.separator
 - Type: `String` (default: `\n`)
 
 String to separate object data with.
+
+#### opts.toBufferStream
+- Type: `Boolean` (default: `false`)
+
+Set this to true when you have an object stream that you would like converted to a stream of line delimited JSON buffers.
+
+If set, this defaults `opts.depth` to `0`, but can still be overridden.
 
 ## License
 

@@ -7,17 +7,40 @@ module.exports = function (opts) {
   opts = opts || {}
 
   var parser = new jsonparse()
+  var json = {}
+
+  if (opts.toBufferStream) opts.objectMode = true
+  if (opts.pluck) opts.pluck = Array.isArray(opts.pluck) ? opts.pluck : [opts.pluck]
+
+  opts.depth = typeof opts.depth === "number"? opts.depth : opts.toBufferStream ? 0 : 1
 
   var jsonl = through(opts, function (chunk, enc, next) {
-    parser.write(chunk)
+    parser.write(Buffer.isBuffer(chunk) ? chunk : JSON.stringify(chunk))
     next()
   })
 
   parser.onValue = function (value) {
-    if (this.stack.length === (typeof opts.depth === "number" ? opts.depth : 1)) {
-      if (opts.objectMode) jsonl.push(value)
-      else jsonl.push(JSON.stringify(value) + (opts.separator || "\n"))
+    var skip = true
+
+    if (this.stack.length === opts.depth) {
+      if (!opts.pluck)
+        skip = false
+      else if (this.key && opts.pluck.indexOf(this.key.toString().toLowerCase()) > -1)
+        json[this.key] = value
     }
+
+    if (typeof value === "object" && Object.keys(json).length > 0) {
+      skip = false
+      value = json
+      json = {}
+    }
+
+    if (skip) return
+
+    if (opts.objectMode && !opts.toBufferStream)
+      jsonl.push(value)
+    else
+      jsonl.push(new Buffer(JSON.stringify(value) + (opts.separator || "\n")))
   }
 
   return jsonl
