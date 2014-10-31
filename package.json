@@ -1,0 +1,28 @@
+{
+  "name": "jsonl",
+  "version": "0.0.0",
+  "description": "Transform a stream of JSON into a stream of Line Delimited JSON",
+  "author": "Stephen Sawchuk <sawchuk@gmail.com> (http://stephenplusplus.com)",
+  "main": "index.js",
+  "repository": "stephenplusplus/jsonl",
+  "files": [
+    "index.js",
+    "LICENSE"
+  ],
+  "keywords": [
+    "json",
+    "stream",
+    "newline"
+  ],
+  "dependencies": {
+    "jsonparse": "0.0.6",
+    "through2": "^0.6.3"
+  },
+  "devDependencies": {
+    "mocha": "^2.0.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "license": "MIT"
+}
