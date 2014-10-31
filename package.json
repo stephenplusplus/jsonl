@@ -1,6 +1,6 @@
 {
   "name": "jsonl",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Transform a stream of JSON into a stream of Line Delimited JSON",
   "author": "Stephen Sawchuk <sawchuk@gmail.com> (http://stephenplusplus.com)",
   "main": "index.js",
