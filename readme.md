@@ -23,6 +23,11 @@ request.get(jeopardyQuestions)
 
 ![](jeopardy.gif)
 
+### Plucking
+You can also select specific fields to be plucked out of the incoming object. In the case below, we are taking the same incoming data as the example above, but selecting only the "category" and "question" properties.
+
+![](https://pbs.twimg.com/media/B1Sd-uVCQAA1BHN.png)
+
 ## API
 
 ### var jsonl = require("jsonl")([opts])
