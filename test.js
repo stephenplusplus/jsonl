@@ -4,8 +4,6 @@ var assert = require("assert")
 var jsonl = require("./")
 var through = require("through2")
 
-var stream = through()
-
 describe("jsonl", function () {
   it("chunks out new lines", function (done) {
     var data = []
@@ -118,11 +116,11 @@ describe("jsonl", function () {
       })
       .on("end", function () {
         assert.deepEqual(data, [
-          '{"hi":0}\n',
-          '{"hi":1}\n',
-          '{"hi":2}\n',
-          '{"hi":3}\n',
-          '{"hi":4}\n'
+          new Buffer('{"hi":0}\n'),
+          new Buffer('{"hi":1}\n'),
+          new Buffer('{"hi":2}\n'),
+          new Buffer('{"hi":3}\n'),
+          new Buffer('{"hi":4}\n')
         ])
         done()
       })
@@ -148,11 +146,11 @@ describe("jsonl", function () {
       })
       .on("end", function () {
         assert.deepEqual(data, [
-          '{"one":{"yo":"hey"}}\n',
-          '{"two":["h","e","y"]}\n',
-          '{"one":{"yo":"hey"}}\n',
-          '{"two":["h","e","y"]}\n',
-          '{"one":{"yo":"hey"}}\n'
+          new Buffer('{"one":{"yo":"hey"}}\n'),
+          new Buffer('{"two":["h","e","y"]}\n'),
+          new Buffer('{"one":{"yo":"hey"}}\n'),
+          new Buffer('{"two":["h","e","y"]}\n'),
+          new Buffer('{"one":{"yo":"hey"}}\n')
         ])
         done()
       })

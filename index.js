@@ -29,7 +29,7 @@ module.exports = function (opts) {
         json[this.key] = value
     }
 
-    if (typeof value === "object" && Object.keys(json).length > 0) {
+    if (this.stack.length <= opts.depth && Object.keys(json).length > 0) {
       skip = false
       value = json
       json = {}
@@ -39,6 +39,8 @@ module.exports = function (opts) {
 
     if (opts.objectMode && !opts.toBufferStream)
       jsonl.push(value)
+    else if (opts.toBufferStream)
+      jsonl.push(new Buffer(JSON.stringify(value) + (opts.separator || "\n")))
     else
       jsonl.push(JSON.stringify(value) + (opts.separator || "\n"))
   }

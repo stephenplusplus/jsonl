@@ -8,25 +8,94 @@ $ npm install --save jsonl
 ```
 
 ## Use
+
+### From Buffers
 ```js
+var fs = require("fs")
 var jsonl = require("jsonl")
-var request = require("request")
-var zlib = require("zlib")
 
-var jeopardyQuestions = "http://skeeto.s3.amazonaws.com/share/JEOPARDY_QUESTIONS1.json.gz"
-
-request.get(jeopardyQuestions)
-  .pipe(zlib.Gunzip())
+fs.createReadStream("./in.json")
   .pipe(jsonl())
-  .pipe(process.stdout)
+  .pipe(fs.createWriteStream("./out.json"))
+```
+#### `in.json`
+```json
+[{"test":"value"},{"test":"value"},{"test":"value"},{"test":"value"}]
+```
+#### `out.json`
+```json
+{"test":"value"}
+{"test":"value"}
+{"test":"value"}
+{"test":"value"}
+
 ```
 
-![](jeopardy.gif)
+### From Objects
+```js
+var fs = require("fs")
+var jsonl = require("jsonl")
+var through = require("through2")
+var stream = through.obj()
+
+stream.pipe(jsonl({toBufferStream:true}))
+  .pipe(fs.createWriteStream("./out.json"))
+
+stream.push({test:"value"})
+stream.push({test:"value"})
+stream.push({test:"value"})
+stream.push({test:"value"})
+stream.end()
+```
+#### `out.json`
+```json
+{"test":"value"}
+{"test":"value"}
+{"test":"value"}
+{"test":"value"}
+
+```
+
+### Depth
+To get the results you expect, you will likely need to know the structure of your incoming data. You may have to pass a `depth` property, which corresponds to the layer of the property in a serialized, nested JSON object.
+
+By default, jsonl will use a depth of 1 when reading data from a Buffer stream (expecting objects to be nested in an array), and a depth of 0 from a stream in object mode.
+
+```js
+/*0*/[
+/*1*/  {
+/*2*/    test: "value"
+/*1*/  },
+/*1*/  {
+/*2*/    test: "value"
+/*1*/  }
+/*0*/]
+```
 
 ### Plucking
-You can also select specific fields to be plucked out of the incoming object. In the case below, we are taking the same incoming data as the example above, but selecting only the "category" and "question" properties.
+To filter the incoming data based on properties, you can select specific fields to be plucked out of the incoming object.
 
-![](https://pbs.twimg.com/media/B1Sd-uVCQAA1BHN.png)
+\* You will need to specify a `depth` property for the nested level of the property.
+
+
+```js
+var fs = require("fs")
+var jsonl = require("jsonl")
+
+fs.createReadStream("./in.json")
+  .pipe(jsonl({pluck:["category"], depth:2}))
+  .pipe(fs.createWriteStream("./out.json"))
+```
+#### `in.json`
+```json
+[{"category": "cactus heights", "question":"?", "answer": "!"},{"category": "giraffe shoe sizes", "question":"?", "answer": "!"}]
+```
+#### `out.json`
+```json
+{"category":"cactus heights"}
+{"category":"giraffe shoe sizes"}
+
+```
 
 ## API
 
