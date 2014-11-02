@@ -27,7 +27,7 @@ describe("jsonl", function () {
         done()
       })
 
-    stream.write('[{"hi":0},{"hi":1},{"hi":2},{"hi":3},{"hi":4}')
+    stream.write('[{"hi":0},{"hi":1},{"hi":2},{"hi":3},{"hi":4}]')
     stream.end()
   })
 
@@ -118,11 +118,11 @@ describe("jsonl", function () {
       })
       .on("end", function () {
         assert.deepEqual(data, [
-          new Buffer('{"hi":0}\n'),
-          new Buffer('{"hi":1}\n'),
-          new Buffer('{"hi":2}\n'),
-          new Buffer('{"hi":3}\n'),
-          new Buffer('{"hi":4}\n')
+          '{"hi":0}\n',
+          '{"hi":1}\n',
+          '{"hi":2}\n',
+          '{"hi":3}\n',
+          '{"hi":4}\n'
         ])
         done()
       })
@@ -135,7 +135,7 @@ describe("jsonl", function () {
     stream.end()
   })
 
-  it.only("plucks [obj] properties from same depth", function (done) {
+  it("plucks [obj] properties from same depth", function (done) {
     var data = []
     var stream = through.obj()
 
@@ -148,11 +148,11 @@ describe("jsonl", function () {
       })
       .on("end", function () {
         assert.deepEqual(data, [
-          new Buffer('{"one":{"yo":"hey"}}\n'),
-          new Buffer('{"two":["h","e","y"]}\n'),
-          new Buffer('{"one":{"yo":"hey"}}\n'),
-          new Buffer('{"two":["h","e","y"]}\n'),
-          new Buffer('{"one":{"yo":"hey"}}\n')
+          '{"one":{"yo":"hey"}}\n',
+          '{"two":["h","e","y"]}\n',
+          '{"one":{"yo":"hey"}}\n',
+          '{"two":["h","e","y"]}\n',
+          '{"one":{"yo":"hey"}}\n'
         ])
         done()
       })
