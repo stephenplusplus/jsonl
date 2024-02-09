@@ -40,7 +40,7 @@ module.exports = function (opts) {
     if (opts.objectMode && !opts.toBufferStream)
       jsonl.push(value)
     else if (opts.toBufferStream)
-      jsonl.push(new Buffer(JSON.stringify(value) + (opts.separator || "\n")))
+      jsonl.push(Buffer.from(JSON.stringify(value) + (opts.separator || "\n")))
     else
       jsonl.push(JSON.stringify(value) + (opts.separator || "\n"))
   }
